@@ -2,7 +2,7 @@ package com.elbertribeiro;
 
 import java.sql.*;
 
-public class Main {
+public class ConectDb {
 
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/seu_banco_de_dados";
