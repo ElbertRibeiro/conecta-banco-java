@@ -1,16 +1,16 @@
 package com.elbertribeiro;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
-import oracle.jdbc.datasource.impl.OracleDataSource;
+import oracle.jdbc.pool.OracleDataSource;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class ConectDb {
-    private static final Logger logger = LoggerFactory.getLogger(ConectDb.class);
+    private static final Logger logger = Logger.getLogger(ConectDb.class.getName());
 
     public static void main(String[] args) {
         String tnsName = "nome_do_tns";
+        logger.info(tnsName);
 
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -22,7 +22,7 @@ public class ConectDb {
             String password = "sua_senha";
 
             Connection connection = dataSource.getConnection(username, password);
-            logger.debug("Conexão estabelecida com sucesso!");
+            logger.info("Conexão estabelecida com sucesso!");
 
             String selectQuery = obterSelectDoUsuario();
 
@@ -50,12 +50,12 @@ public class ConectDb {
         int columnCount = metaData.getColumnCount();
 
         for (int i = 1; i <= columnCount; i++) {
-            logger.debug(metaData.getColumnName(i) + "\t");
+            logger.info(metaData.getColumnName(i) + "\t");
         }
 
         while (resultSet.next()) {
             for (int i = 1; i <= columnCount; i++) {
-                logger.debug(resultSet.getString(i) + "\t");
+                logger.info(resultSet.getString(i) + "\t");
             }
         }
     }
