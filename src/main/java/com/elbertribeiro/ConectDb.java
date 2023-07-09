@@ -1,17 +1,28 @@
 package com.elbertribeiro;
 
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
+import oracle.jdbc.datasource.impl.OracleDataSource;
+
 import java.sql.*;
 
 public class ConectDb {
+    private static final Logger logger = LoggerFactory.getLogger(ConectDb.class);
 
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/seu_banco_de_dados";
-        String username = "seu_usuario";
-        String password = "sua_senha";
+        String tnsName = "nome_do_tns";
 
         try {
-            Connection connection = DriverManager.getConnection(url, username, password);
-            System.out.println("Conexão estabelecida com sucesso!");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            OracleDataSource dataSource = new OracleDataSource();
+            dataSource.setURL("jdbc:oracle:thin:@" + tnsName);
+
+            String username = "seu_usuario";
+            String password = "sua_senha";
+
+            Connection connection = dataSource.getConnection(username, password);
+            logger.debug("Conexão estabelecida com sucesso!");
 
             String selectQuery = obterSelectDoUsuario();
 
@@ -23,6 +34,8 @@ public class ConectDb {
             resultSet.close();
             statement.close();
             connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,15 +50,13 @@ public class ConectDb {
         int columnCount = metaData.getColumnCount();
 
         for (int i = 1; i <= columnCount; i++) {
-            System.out.print(metaData.getColumnName(i) + "\t");
+            logger.debug(metaData.getColumnName(i) + "\t");
         }
-        System.out.println();
 
         while (resultSet.next()) {
             for (int i = 1; i <= columnCount; i++) {
-                System.out.print(resultSet.getString(i) + "\t");
+                logger.debug(resultSet.getString(i) + "\t");
             }
-            System.out.println();
         }
     }
 }
