@@ -34,9 +34,7 @@ public class ConectDb {
             resultSet.close();
             statement.close();
             connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
